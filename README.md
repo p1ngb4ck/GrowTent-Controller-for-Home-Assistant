@@ -3,7 +3,7 @@ Original idea comes from https://github.com/TechSmartSolutions/0-10v-lighting-co
 This solution provides 16 channel PWM compatible with MeanWell 10V PWM and others & using relays to fully cut off lamps automatically from power when lights is dimmed/turned off.
 
 ### My findings:
-Original project does actually not dim by PWM, but using additive voltage dimming - works fine, but needs additional power-supply/buck module in addition to 5V supply. "Real" PWM is just switching at a specific frequency, without the need for additional supply of the PWM voltage.
+Original project does actually not dim by PWM, but uses additive voltage dimming - works fine, but needs additional power-supply/buck module in addition to 5V supply. "Real" PWM is just switching at a specific frequency, without the need for additional supply of the PWM voltage.
 MeanWell drivers provide a 3-Way-Dimmer : 10V PWM, 10V additive voltage, resistance (mostly used in knob dimmers).
 ### Unfortunately, the Adafruit TLC5947 module mentioned in the original project has a fixed PWM frequency of 4MHz, while the supported 10V PWM frequency range of MeanWell drivers is 100Hz to 3kHZ. Therefore "true" PWM LED control is not possible using that module:
 ->you need to do additive voltage dimming with that module, with the need of 10V (or 12V) supplied externally.
