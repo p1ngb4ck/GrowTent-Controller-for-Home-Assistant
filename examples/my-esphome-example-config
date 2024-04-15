@@ -1,0 +1,303 @@
+substitutions:
+  name: esphome-web-ed65b3
+  friendly_name: ESPHome Wemos
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  name_add_mac_suffix: false
+  project:
+    name: esphome.web
+    version: '1.0'
+
+esp8266:
+  board: esp01_1m
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+# Allow Over-The-Air updates
+ota:
+
+font:
+  - file: "gfonts://Roboto"
+    id: my_font
+    size: 20
+
+i2c:
+  sda: 4
+  scl: 5
+  scan: true
+  frequency: "1MHz"
+
+
+pca9685:
+  - frequency: 1000
+
+output:
+  - platform: pca9685
+    channel: 0
+    id: pwm01
+    inverted: True
+    min_power: 0.06
+    max_power: 0.80
+  - platform: pca9685
+    channel: 1
+    id: pwm02
+    inverted: True
+    min_power: 0.06
+    max_power: 0.80
+  - platform: pca9685
+    channel: 2
+    id: pwm03
+    inverted: True
+  - platform: pca9685
+    channel: 3
+    id: pwm04
+    inverted: True
+  - platform: pca9685
+    channel: 4
+    id: pwm05
+    inverted: True
+  - platform: pca9685
+    channel: 5
+    id: pwm06
+    inverted: True
+  - platform: pca9685
+    channel: 6
+    id: pwm07
+    inverted: True
+  - platform: pca9685
+    channel: 7
+    id: pwm08
+    inverted: True
+  - platform: pca9685
+    channel: 8
+    id: pwm09
+    inverted: True
+  - platform: pca9685
+    channel: 9
+    id: pwm10
+    inverted: True
+  - platform: pca9685
+    channel: 10
+    id: pwm11
+    inverted: True
+  - platform: pca9685
+    channel: 11
+    id: pwm12
+    inverted: True
+  - platform: pca9685
+    channel: 12
+    id: pwm13
+    inverted: True
+  - platform: pca9685
+    channel: 13
+    id: pwm14
+    inverted: True
+  - platform: pca9685
+    channel: 14
+    id: pwm15
+    inverted: True
+  - platform: pca9685
+    channel: 15
+    id: pwm16
+    inverted: True
+
+light:
+  - platform: monochromatic
+    name: "GROW LED Channel 1"
+    output: pwm01
+    gamma_correct: 1
+    on_turn_on:
+      - switch.turn_on: relay1
+      - switch.turn_on: relay2
+    on_turn_off:
+      - switch.turn_off: relay1
+      - switch.turn_off: relay2
+  - platform: monochromatic
+    name: "GROW LED Channel 2"
+    output: pwm02
+    gamma_correct: 1
+  - platform: status_led
+    name: "Status LED"
+    pin:
+      number: GPIO2
+      inverted: true
+
+mcp23017:
+  - id: 'mcp23017_hub'
+    address: 0x20
+
+# 8 individual relays
+switch:
+  - platform: gpio
+    icon: mdi:electric-switch
+    id: relay1
+    pin:
+      mcp23xxx: mcp23017_hub
+      # Use pin A0
+      number: 0
+      mode:
+        output: True
+        pullup: False
+      inverted: True
+
+  - platform: gpio
+    icon: mdi:electric-switch
+    id: relay2
+    pin:
+      mcp23xxx: mcp23017_hub
+      # Use pin A1
+      number: 1
+      mode:
+        output: True
+        pullup: False
+      inverted: True
+  
+  - platform: gpio
+    name: "Relais 1"
+    icon: mdi:electric-switch
+    id: relay3
+    pin:
+      mcp23xxx: mcp23017_hub
+      # Use pin A2
+      number: 2
+      mode:
+        output: True
+        pullup: False
+      inverted: True
+
+  - platform: gpio
+    name: "Relais 2"
+    icon: mdi:electric-switch
+    id: relay4
+    pin:
+      mcp23xxx: mcp23017_hub
+      # Use pin A3
+      number: 3
+      mode:
+        output: True
+        pullup: False
+      inverted: True
+
+  - platform: gpio
+    name: "Relais 3"
+    icon: mdi:electric-switch
+    id: relay5
+    pin:
+      mcp23xxx: mcp23017_hub
+      # Use pin A4
+      number: 4
+      mode:
+        output: True
+        pullup: False
+      inverted: True
+
+  - platform: gpio
+    name: "Relais 4"
+    icon: mdi:electric-switch
+    id: relay6
+    pin:
+      mcp23xxx: mcp23017_hub
+      # Use pin A5
+      number: 5
+      mode:
+        output: True
+        pullup: False
+      inverted: True
+
+  - platform: gpio
+    name: "Relais 5"
+    icon: mdi:electric-switch
+    id: relay7
+    pin:
+      mcp23xxx: mcp23017_hub
+      # Use pin A6
+      number: 6
+      mode:
+        output: True
+        pullup: False
+      inverted: True
+
+  - platform: gpio
+    name: "Relais 6"
+    icon: mdi:electric-switch
+    id: relay8
+    pin:
+      mcp23xxx: mcp23017_hub
+      # Use pin A7
+      number: 7
+      mode:
+        output: True
+        pullup: False
+      inverted: True
+
+globals:
+  - id: dht11_temperature
+    type: double
+    initial_value: "0.00"
+  - id: dht11_humidity
+    type: double
+    initial_value: "0.00"
+
+display:
+  - platform: ssd1306_i2c
+    id: ssd1306
+    model: "SSD1306 128x64"
+    address: 0x3C
+    pages:
+      - id: page1
+        lambda: |-
+          it.printf(50, 24, id(my_font), "%.1f°", id(dht11_temperature));
+      - id: page2
+        lambda: |-
+          it.printf(46, 24, id(my_font), "%.1f%%", id(dht11_humidity));
+
+interval:
+  - interval: 5s
+    then:
+      - display.page.show_next: ssd1306
+      - component.update: ssd1306
+
+# Allow provisioning Wi-Fi via serial
+improv_serial:
+
+# Example configuration entry
+sensor:
+  - platform: dht
+    pin: GPIO0
+    id: dht11
+    temperature:
+      id: dht11_temp
+      name: "DHT11 Temperature"
+      on_value:
+        then:
+          - lambda: |-
+              id(dht11_temperature) = id(dht11_temp).state;
+    humidity:
+      id: dht11_rh
+      name: "DHT11 Humidity"
+      on_value:
+        then:
+          - lambda: |-
+              id(dht11_humidity) = id(dht11_rh).state;
+    update_interval: 10s
+
+wifi:
+  # Set up a wifi access point
+  ap: {}
+
+# In combination with the `ap` this allows the user
+# to provision wifi credentials to the device via WiFi AP.
+captive_portal:
+
+dashboard_import:
+  package_import_url: github://esphome/example-configs/esphome-web/esp8266.yaml@main
+  import_full_config: true
+
+# To have a "next url" for improv serial
+web_server:
