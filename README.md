@@ -1,3 +1,24 @@
+Original idea comes from https://github.com/TechSmartSolutions/0-10v-lighting-controller-for-Home-Assistant - adopted and tried to improve the idea.
+My findings:
+Original project does actually not dim by PWM, but using additive voltage dimming - works fine, but needs additional power-supply/buck module in addition to 5V supply. "Real" PWM is just switching at a specific frequency, without the need for additional supply of the PWM voltage.
+MeanWell drivers provide a 3-Way-Dimmer : 10V PWM, 10V additive voltage, resistance (mostly used in knob dimmers).
+Unfortunately, the Adafruit TLC5947 module mentioned in the original project has a fixed PWM frequency of 4MHz, while the supported 10V PWM frequency range of MeanWell drivers is 100Hz to 3kHZ. Therefore "true" PWM LED control is not possible using that module - you need to do additive voltage dimming with that module, with the need of 10V (or 12V) supplied externally.
+There is another PWM module though, that allows multi-channel-pwm : the Adafruit 16 channel pwm servo control module PCA9685. That module allows to control the frequency, allowing to set a frequency in range of the allowed range for PWM of the MeanWell driver -> eg. 1kHz.
+Downside - the allowed max voltage for that module is 6V - a little higher than ESP pins (3.3V) - but not enough for 10V PWM dimming - you would basically have the same problem as when using an esp/arduino pin directly -> it could get damaged as it switches a 10V circuit while being rated much lower.
+Solution:
+The solution is to add another logic-level NPN-Transistor. Luckily, the 10V-PWM-circuit of the MeanWell driver is using 100uA only -> no problem to switch that load at all. So we only need to case about switching frequency capabilities of the transistor -> which is far higher also, just like the allowed voltage range.
+So we can just add a 470Ohms (when on 3.3 Logic) or 1k Ohms (when working with 5V Logic) resistor in series to each PWM pin of the module, leading to the base of a eg. 2N3904 transistor. Emitters of those transitors are connected to GND and DIM-, Collector is connected to DIM+ (just use a terminal connector socket, as displayed in my example circuit).
+
+Also, I wanted to really cut off my lamps from power, when shut off - this is realized using an extra MCP23017 GPIO expander, connected via i2c to the mcu and controlling an 8 channel relay, rated for 230V AC @ 5A. As I want to cut off Neutral AND Live, this allows to cut off 4 lamps from power in total.
+A display and a DHT11 is added as example also. In the future I will add additional local control via rotary encoder and examples for lux-sensor, humditiy, pressure, temp using different sensor types, radio control (incl. socket control of rf controlled sockets).
+With the circuit on the picture, it is possibly to use a cheap 230V->5V/2A power buck module to be added at the end of the normal power cable, providing additional relay controlled power to the lamp(s) as well as the dimming control then -> basically like a Zigbee that can just integrate to the powerline without additional connections.
+
+
+
+
+Reference to original project. TLC5947 module can be integrated into the circuit above - if PWM ports of Adafruit TLC5947 are each connected through a 1k ohms resistor to the base of a 2N222 transistor and you supply 12V as described in original project, you can use that as a 24 channel 12V fan controller!
+Complete example circuit for that will be added soon. Of course, you can add additional i2c devices (sensors, eg. humidity, pressure, lux) depending on your needs ..
+
 ### What is 0-10V?
 0-10V is a simple low voltage, low current, low-cost, and reliable electrical signal used as a method for transmitting information and control signals between devices in control systems and building automation.  0-10V are either Analog or Digital (PWM).  If your LED/HPS ballast or HVAC equiptment supports 0-10v, that means you can control the brightness/speed by controlling the 0-10v control signal.  This repo provides info on building both types of 0-10v signal controllers: Analog and PWM.
 
