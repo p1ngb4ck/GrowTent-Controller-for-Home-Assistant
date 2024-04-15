@@ -20,6 +20,8 @@ With the circuit on the picture, it is possibly to use a cheap 230V->5V/2A power
 Reference to original project. TLC5947 module can be integrated into the circuit above - if PWM ports of Adafruit TLC5947 are each connected through a 1k ohms resistor to the base of a 2N222 transistor and you supply 12V as described in original project, you can use that as a 24 channel 12V fan controller!
 Complete example circuit for that will be added soon. Of course, you can add additional i2c devices (sensors, eg. humidity, pressure, lux) depending on your needs ..
 
+### Original project contents from here:
+
 ### What is 0-10V?
 0-10V is a simple low voltage, low current, low-cost, and reliable electrical signal used as a method for transmitting information and control signals between devices in control systems and building automation.  0-10V are either Analog or Digital (PWM).  If your LED/HPS ballast or HVAC equiptment supports 0-10v, that means you can control the brightness/speed by controlling the 0-10v control signal.  This repo provides info on building both types of 0-10v signal controllers: Analog and PWM.
 
