@@ -1,6 +1,6 @@
 Original idea comes from https://github.com/TechSmartSolutions/0-10v-lighting-controller-for-Home-Assistant - adopted and tried to improve the idea.
 
-This solution provides 16 channel PWM compatible with MeanWell 10V PWM and others & using relays to fully cut off lamps automatically fronm power when lights is dimmed/turned off.
+This solution provides 16 channel PWM compatible with MeanWell 10V PWM and others & using relays to fully cut off lamps automatically from power when lights is dimmed/turned off.
 
 ### My findings:
 Original project does actually not dim by PWM, but using additive voltage dimming - works fine, but needs additional power-supply/buck module in addition to 5V supply. "Real" PWM is just switching at a specific frequency, without the need for additional supply of the PWM voltage.
