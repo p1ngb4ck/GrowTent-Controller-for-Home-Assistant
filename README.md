@@ -8,6 +8,17 @@ MeanWell drivers provide a 3-Way-Dimmer : 10V PWM, 10V additive voltage, resista
 ### Unfortunately, the Adafruit TLC5947 module mentioned in the original project has a fixed PWM frequency of 4MHz, while the supported 10V PWM frequency range of MeanWell drivers is 100Hz to 3kHZ. Therefore "true" PWM LED control is not possible using that module:
 ->you need to do additive voltage dimming with that module, with the need of 10V (or 12V) supplied externally.
 
+### What is important to understand when building PWM circuits, also true for MeanWell 10VPWM dimming :
+PWM does not mean to "send voltage pulses". Remember - esp and arduino work with active low signals ! So when you put a pin to high status, it goes LOW (=>GND) electronically. So you are not(!) sending any pulses or sth.
+PWM actually works a different way: The device, that is to be controlled (not the controller mcu) supplies an open circuit that would run at a specific voltage, when closed (having its own GND and V+!). Also, it makes the open lines both available via some kind of connector. That is why:
+
+- directly connected DIM- & DIM+ lines make the driver go 100%
+- supported PWM frequency is important to obey
+- no external extra supply of the voltage the PWM circuit is required (it`s in the device that is being controlled !)
+- arduino/esp pins would switch a circuit that runs far above their allowed voltage ratings.
+
+Why does the original project work just fine then? => Because it provides an external power circuit, where the voltage is created in the circuit using the PWM, but is applied as a voltage to the dimmer -> therefore it is doing additive voltage, not PWM. The high PWM-frequency helps a lot to provide a lot smoother voltage, than it would be possible at eg. 1kHZ.
+
 ### Solution:
 There is another PWM module though, that allows multi-channel-pwm : the Adafruit 16 channel pwm servo control module PCA9685. That module allows to control the frequency, allowing to set a frequency in range of the allowed range for PWM of the MeanWell driver -> eg. 1kHz.
 Downside - the allowed max voltage for that module is 6V - a little higher than ESP pins (3.3V) - but not enough for 10V PWM dimming - you would basically have the same problem as when using an esp/arduino pin directly -> it could get damaged as it switches a 10V circuit while being rated much lower.
