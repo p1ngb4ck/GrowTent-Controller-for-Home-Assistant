@@ -15,6 +15,8 @@ Also, I wanted to really cut off my lamps from power, when shut off - this is re
 A display and a DHT11 is added as example also. In the future I will add additional local control via rotary encoder and examples for lux-sensor, humditiy, pressure, temp using different sensor types, radio control (incl. socket control of rf controlled sockets).
 With the circuit on the picture, it is possibly to use a cheap 230V->5V/2A power buck module to be added at the end of the normal power cable, providing additional relay controlled power to the lamp(s) as well as the dimming control then -> basically like a Zigbee that can just integrate to the powerline without additional connections.
 
+Note : to not overload the picture, I added only 2 10V PWM channels - you can add additional channels respectively just the same way.
+
 <img src="/images/GrowController_Steckplatine.png">
 
 Reference to original project. TLC5947 module can be integrated into the circuit above - if PWM ports of Adafruit TLC5947 are each connected through a 1k ohms resistor to the base of a 2N222 transistor and you supply 12V as described in original project, you can use that as a 24 channel 12V fan controller!
