@@ -32,6 +32,7 @@ With the circuit on the picture, it is possibly to use a cheap 230V->5V/2A power
 Note : to not overload the picture, I added only 2 10V PWM channels - you can add additional channels respectively just the same way.
 
 <img src="/images/GrowController_Steckplatine.png">
+<img src="/images/Screenshot HA-Prototype.png">
 
 Reference to original project. TLC5947 module can be integrated into the circuit above - if PWM ports of Adafruit TLC5947 are each connected through a 1k ohms resistor to the base of a 2N222 transistor and you supply 12V as described in original project, you can use that as a 24 channel 12V fan controller!
 Complete example circuit for that will be added soon. Of course, you can add additional i2c devices (sensors, eg. humidity, pressure, lux) depending on your needs ..
