@@ -37,6 +37,12 @@ Note : to not overload the picture, I added only 2 10V PWM channels - you can ad
 Reference to original project. TLC5947 module can be integrated into the circuit above - if PWM ports of Adafruit TLC5947 are each connected through a 1k ohms resistor to the base of a 2N222 transistor and you supply 12V as described in original project, you can use that as a 24 channel 12V fan controller!
 Complete example circuit for that will be added soon. Of course, you can add additional i2c devices (sensors, eg. humidity, pressure, lux) depending on your needs ..
 
+Fan Controller:
+
+Each pin can also be used to control 12V/24V Fans. See the below attached Fritzing-image, where an example fan-channel is also shown. You can of course add additional fan channels just the same way.
+Circuit is quite simple: Same PWM=> to resistor => to base as with the LED PWM Output, just take a 2N222 (can handle up to 0.7A) this time, and add another 10k resistor from base to GND.
+Collector goes to 12V, the negtive Side of a 2N4001 Diode and positive side of a 16V-10nF capacitor. Emitter goes to GND as well as positive side of diode and - of the cap. In parallel to the cap then goes the fan connector.
+
 ### Original project contents from here:
 
 ### What is 0-10V?
